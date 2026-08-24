@@ -1,0 +1,51 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  body {
+    @apply transition-colors duration-500 ease-in-out bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100;
+  }
+}
+
+@theme {
+  --color-purple-600: #5046e4;
+  --color-purple-500: #e0e7fe;
+  --color-purple-300: #a19afc;
+  --color-purple-200: #c2c3fe;
+
+  /* Accent (used in cards, badges, links) */
+  --color-accent-400: #818cf8;
+  --color-accent-500: #6366f1;
+  --color-accent-600: #5046e4;
+
+  /* Text shades (used in labels, descriptions) */
+  --color-text-primary: #111827;
+  --color-text-secondary: #4b5563;
+  --color-text-muted: #9ca3af;
+
+  /* Status colors (used in error messages, delete buttons) */
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-success-500: #22c55e;
+
+  /* Surface / border tokens (used in empty states, modals) */
+  --color-surface: #ffffff;
+  --color-border-base: #e5e7eb;
+  --color-border-subtle: #f3f4f6;
+}
+
+/* ── Animations (used in modals, cards) ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-fade-in { animation: fadeIn 0.3s ease-out both; }
+.animate-slide-up { animation: slideUp 0.35s ease-out both; }
+
+/* ── Background mesh for SharedBrain page ── */
+.bg-mesh { background: #f9fafb; }
