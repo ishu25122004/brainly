@@ -4,6 +4,7 @@ import {useState} from "react"
 import axios from "axios"
 import {BACKEND_URL} from "../config"
 import {useNavigate} from "react-router-dom"
+import {createPortal} from "react-dom"
 
 interface AccountSettingsModalProps {
     open: boolean;
@@ -82,11 +83,13 @@ export function AccountSettingsModal({open, onClose}: AccountSettingsModalProps)
 
      if(!open) return null;
 
-     return<div>
-            <div className="fixed inset-0 bg-slate-500/50 z-40" onClick={onClose}></div>
-            
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-               <div className="w-full max-w-lg bg-white rounded-xl shadow-lg animate-in fade-in zoom-in duration-200">
+     return createPortal(
+          <div>
+             <div className="fixed inset-0 bg-slate-500/50 z-40" onClick={onClose}></div>
+             
+             {/* Push it slightly to the right of the drawer (left-80 is 320px) */}
+             <div className="fixed inset-0 z-50 flex items-center justify-start p-4 pl-[340px]">
+                <div className="w-full max-w-md bg-white rounded-xl shadow-lg animate-in fade-in zoom-in duration-200">
                       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                          <h2 className="text-lg font-semibold text-gray-900">Account Settings</h2>
                          <div onClick={onClose} className="cursor-pointer p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors">
@@ -179,6 +182,8 @@ export function AccountSettingsModal({open, onClose}: AccountSettingsModalProps)
                </div>  
             </div>
                      
-          </div>
+          </div>,
+          document.body
+     );
 }
 
