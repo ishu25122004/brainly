@@ -17,11 +17,12 @@ export function Dashboard() {
   const [modelOpen, setModelOpen] = useState(false);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editingContent, setEditingContent] = useState<Record<string, unknown> | null>(null);
+  const [editingContent, setEditingContent] = useState<any>(null);
   const [activeFilter, setActiveFilter] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [layoutView, setLayoutView] = useState<"grid" | "list">("grid");
   const [cmdOpen, setCmdOpen] = useState(false);
   
@@ -96,10 +97,12 @@ export function Dashboard() {
           availableTags={allTags}
           isCollapsed={isSidebarCollapsed}
           onCollapseChange={setIsSidebarCollapsed}
+          isOpenMobile={isMobileMenuOpen}
+          onCloseMobile={() => setIsMobileMenuOpen(false)}
         />
 
         {/* Main Content Wrapper - Everything else must stay INSIDE this div */}
-        <div className={`flex-1 min-h-screen bg-gray-50 dark:bg-gray-950 transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'ml-20' : 'ml-72'}`}>
+        <div className={`flex-1 min-h-screen bg-gray-50 dark:bg-gray-950 transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'md:ml-20' : 'md:ml-72'} ml-0`}>
 
           <CreateContentModel
             open={modelOpen}
@@ -125,9 +128,17 @@ export function Dashboard() {
           <CommandPalette open={cmdOpen} setOpen={setCmdOpen} contents={contents} />
 
           {/* Header section */}
-          <div className="sticky top-0 bg-gray-50 dark:bg-gray-950 z-10 px-10 pt-10 pb-4 flex justify-between items-center mb-4 border-b border-gray-100/0 transition-colors">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+          <div className="sticky top-0 bg-gray-50 dark:bg-gray-950 z-10 px-4 md:px-10 pt-4 md:pt-10 pb-4 flex justify-between items-center mb-4 border-b border-gray-100/0 transition-colors">
+            <div className="flex items-center gap-3">
+              <button 
+                className="md:hidden p-2 -ml-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                onClick={() => setIsMobileMenuOpen(true)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+              <h1 className="text-xl md:text-3xl font-bold text-gray-900 dark:text-white mb-0 md:mb-1">
                 {activeFilter === 'tags' ? 'Browse by Tags' : 
                  activeFilter === 'all' ? 'All Notes' : 
                  activeFilter.charAt(0).toUpperCase() + activeFilter.slice(1)}
@@ -176,7 +187,7 @@ export function Dashboard() {
           
           {/* Tags View Filter Pills */}
           {activeFilter === "tags" && allTags.length > 0 && (
-             <div className="px-10 pb-6 flex gap-2 flex-wrap">
+             <div className="px-4 md:px-10 pb-6 flex gap-2 flex-wrap">
                 <button 
                   onClick={() => setSelectedTag(null)}
                   className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border shadow-sm ${!selectedTag ? 'bg-indigo-600 text-white border-indigo-600 shadow-indigo-200 dark:shadow-none' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
@@ -196,7 +207,7 @@ export function Dashboard() {
           )}
 
           {/* Card Grid Section - Moved INSIDE the main wrapper */}
-          <div className="px-10 pb-10">
+          <div className="px-4 md:px-10 pb-10">
 
             {/* Empty state */}
             {filteredContents.length === 0 && (

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { NoteViewerModal } from "./NoteViewerModal";
 import ReactMarkdown from 'react-markdown';
 import { useDraggable } from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
 
 interface CardProps{
     type: "youtube" | "twitter" | "document" | "link" | "note";
@@ -22,9 +21,10 @@ interface CardProps{
     extractedText?: string;
     layout?: "grid" | "list";
     _id?: string;
+    previewImage?: string;
 }
 
-export function Card({_id, type,link,title,tags, isPinned, isTrashed, previewImage, previewDescription, content, summary, extractedText, layout = "grid", onDelete, onEdit, onTogglePin, onRestore, onPermanentDelete}:CardProps){
+export function Card({_id, type,link,title,tags, isPinned, isTrashed, previewImage, previewDescription, content, summary, layout = "grid", onDelete, onEdit, onTogglePin, onRestore, onPermanentDelete}:CardProps){
     const [isNoteOpen, setIsNoteOpen] = useState(false);
     const {attributes, listeners, setNodeRef, isDragging} = useDraggable({
         id: _id || title,

@@ -16,9 +16,11 @@ interface SidebarProps {
     availableTags?: string[];
     isCollapsed?: boolean;
     onCollapseChange?: (collapsed: boolean) => void;
+    isOpenMobile?: boolean;
+    onCloseMobile?: () => void;
 }
 
-export function Sidebar({ activeFilter = "all", onFilterChange, selectedTag = null, onTagSelect, availableTypes = [], availableTags = [], isCollapsed = false, onCollapseChange }: SidebarProps) {
+export function Sidebar({ activeFilter = "all", onFilterChange, selectedTag = null, onTagSelect, availableTypes = [], availableTags = [], isCollapsed = false, onCollapseChange, isOpenMobile = false, onCloseMobile }: SidebarProps) {
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [tagsExpanded, setTagsExpanded] = useState(false);
     const { theme, toggleTheme } = useTheme();
@@ -58,8 +60,16 @@ export function Sidebar({ activeFilter = "all", onFilterChange, selectedTag = nu
     };
 
     return (
-        <div className={`h-screen bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-r border-slate-200 dark:border-gray-800 fixed left-0 top-0 flex flex-col z-20 transition-all duration-300 ease-in-out ${isCollapsed ? 'w-20' : 'w-72'}`}>
-            <div className={`flex items-center pt-8 pb-6 ${isCollapsed ? 'px-4 justify-center' : 'px-6'}`}>
+        <>
+        {/* Mobile Overlay */}
+        {isOpenMobile && (
+            <div 
+                className="fixed inset-0 bg-black/20 dark:bg-black/40 z-10 md:hidden backdrop-blur-sm transition-opacity"
+                onClick={onCloseMobile}
+            />
+        )}
+        <div className={`h-screen bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-r border-slate-200 dark:border-gray-800 fixed left-0 top-0 flex flex-col z-20 transition-all duration-300 ease-in-out ${isOpenMobile ? 'translate-x-0' : '-translate-x-full md:translate-x-0'} ${isCollapsed ? 'md:w-20 w-72' : 'w-72'}`}>
+            <div className={`flex items-center pt-8 pb-6 ${isCollapsed ? 'md:px-4 md:justify-center px-6' : 'px-6'}`}>
                 <div className="text-indigo-600 dark:text-indigo-500 flex items-center gap-2 overflow-hidden whitespace-nowrap">
                     <div className="shrink-0">
                         <Logo className="w-8 h-8 hover:scale-110 transition-transform duration-300 cursor-pointer" />
@@ -192,7 +202,7 @@ export function Sidebar({ activeFilter = "all", onFilterChange, selectedTag = nu
             </div>
 
             {/* Collapse Toggle Button */}
-            <div className="absolute -right-3 top-24 z-30">
+            <div className="hidden md:block absolute -right-3 top-24 z-30">
                 <button 
                     onClick={() => onCollapseChange?.(!isCollapsed)}
                     className="w-6 h-6 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md flex items-center justify-center text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors focus:outline-none"
@@ -238,5 +248,6 @@ export function Sidebar({ activeFilter = "all", onFilterChange, selectedTag = nu
 
             <ProfileDrawer isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
         </div>
+        </>
     );
 }

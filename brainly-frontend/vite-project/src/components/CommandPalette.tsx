@@ -1,6 +1,5 @@
 import { Command } from 'cmdk';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 interface CommandPaletteProps {
     open: boolean;
@@ -9,8 +8,6 @@ interface CommandPaletteProps {
 }
 
 export function CommandPalette({ open, setOpen, contents }: CommandPaletteProps) {
-    const navigate = useNavigate();
-
     // Toggle the menu when ⌘K is pressed
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
